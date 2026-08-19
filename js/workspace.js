@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function fetchQuestionsFromGemini(targetCount, difficulty, topic, type) {
         const typeDesc = type === 'multiple-choices' ? 'Pilihan Ganda Kompleks' : (type === 'essay' ? 'Essay' : 'Pilihan Ganda');
         const prompt = `Buatlah tepat ${targetCount} soal latihan matematika/fisika tingkat ${currentLevel} tentang subtopik "${topic}" dengan tingkat kesulitan "${difficulty}" dan tipe "${typeDesc}".
-WAJIB: Gunakan notasi LaTeX dibungkus simbol dollar ($ ... $) untuk semua formula dan angka matematika (contoh: ${}^{2}\\log 8 = 3$ atau $\\log_2 8 = 3$ atau $2^3 = 8$). JANGAN gunakan backslash sebelum dollar (jangan pakai \\$).
+WAJIB: Gunakan notasi LaTeX dibungkus simbol dollar ($ ... $) untuk semua formula dan angka matematika (contoh: \${}^{2}\\log 8 = 3$ atau $\\log_2 8 = 3$ atau $2^3 = 8$). JANGAN gunakan backslash sebelum dollar (jangan pakai \\$).
 Kembalikan respon DALAM FORMAT JSON MURNI TANPA MARKDOWN CODEBLOCK:
 [
   {

@@ -246,7 +246,7 @@ function initFloatingAIChat() {
 
                 <div class="fchat-chips" id="fchat-chips">
                     <button class="fchat-chip-btn" data-prompt="Jelaskan konsep dasar Logaritma dan sifat-sifat utamanya!">💡 Konsep Logaritma</button>
-                    <button class="fchat-chip-btn" data-prompt="Bagaimana langkah menghitung ${}^{2}\log 8 = 3$? Jelaskan!">📐 Hitung ²log 8</button>
+                    <button class="fchat-chip-btn" data-prompt="Bagaimana langkah menghitung \${}^{2}\\log 8 = 3$? Jelaskan!">📐 Hitung ²log 8</button>
                     <button class="fchat-chip-btn" data-prompt="Berikan 1 contoh soal latihan logaritma tingkat SMA beserta pembahasan!">✏️ Contoh Soal Logaritma</button>
                 </div>
             </div>
