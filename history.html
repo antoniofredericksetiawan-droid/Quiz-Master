@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster - Riwayat Latihan Soal Anda</title>
+    <meta name="description" content="Lihat seluruh riwayat pengerjaan latihan soal Matematika & Fisika beserta kunci pembahasan yang tersimpan.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for beautiful math formula rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.contrib/auto-render.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Blur Decorative Elements -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Navigation Bar -->
+    <header class="navbar" id="main-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo" id="nav-brand">
+                <i data-lucide="brain-circuit" class="logo-icon"></i>
+                <span>Quiz<span class="logo-accent">Master</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link" id="link-home">Home</a>
+                <a href="history.html" class="nav-link active" id="link-history">Riwayat Soal</a>
+            </nav>
+            <div class="nav-cta">
+                <button class="btn-theme-toggle" id="btn-settings-toggle" aria-label="Pengaturan API" title="Pengaturan AI Gemini">
+                    <i data-lucide="settings"></i>
+                </button>
+                <button class="btn-theme-toggle" id="btn-theme-toggle" aria-label="Toggle Tema Terang/Gelap" title="Ubah Tema">
+                    <i data-lucide="sun" id="theme-icon"></i>
+                </button>
+                <a href="index.html#step-subject-container" class="btn btn-secondary btn-sm" id="btn-quick-start">Pilih Pelajaran</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main History Content -->
+    <main class="main-content">
+        <section class="view-panel" id="panel-history">
+            <div class="container history-container">
+                <div class="section-header">
+                    <h2>Riwayat Latihan <span class="gradient-text">Soal Anda</span></h2>
+                    <p>Semua pengerjaan latihan soal, difficulty yang diuji, jawaban Anda, dan pembahasan yang berhasil Anda simpan.</p>
+                </div>
+
+                <div class="glass-card history-card">
+                    <div class="history-toolbar">
+                        <span class="history-count" id="history-counter">0 Soal Tersimpan</span>
+                        <button class="btn btn-outline btn-sm warning-border" id="btn-clear-all-history">
+                            <i data-lucide="trash-2"></i> Hapus Semua Riwayat
+                        </button>
+                    </div>
+                    
+                    <div class="history-list-wrapper">
+                        <div class="empty-history" id="history-empty">
+                            <i data-lucide="folder-open" class="empty-icon"></i>
+                            <p>Belum ada riwayat soal yang disimpan. Mulai kerjakan latihan soal dan simpan ke riwayat!</p>
+                        </div>
+                        <div class="history-list" id="history-list-container">
+                            <!-- Injected by js/history.js -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL: API Settings -->
+    <div class="modal-overlay hidden" id="modal-api-settings">
+        <div class="glass-card modal-content">
+            <div class="modal-header">
+                <h3>Pengaturan AI Gemini</h3>
+                <button class="btn-close-modal" id="btn-close-api-modal" aria-label="Tutup modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Masukkan Google Gemini API Key Anda untuk mengaktifkan pembuatan soal dinamis cerdas berbasis AI. Key disimpan aman di browser Anda.</p>
+                <form id="form-api-settings">
+                    <div class="input-field-group" style="margin-bottom: 16px;">
+                        <label for="input-api-key">Gemini API Key:</label>
+                        <input type="password" id="input-api-key" placeholder="AIzaSy..." autocomplete="off">
+                    </div>
+                    <div class="input-field-group">
+                        <label for="input-model-name">Nama Model Gemini:</label>
+                        <input type="text" id="input-model-name" placeholder="gemini-3.5-flash-lite" autocomplete="off">
+                        <small style="color: var(--text-muted); font-size: 0.8em; margin-top: 4px; display: block;">Contoh: gemini-3.5-flash-lite, gemini-2.5-flash, gemini-1.5-flash</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-api-modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <i data-lucide="brain-circuit" class="logo-icon"></i>
+                    <span>Quiz<span class="logo-accent">Master</span></span>
+                </a>
+                <p>Website belajar matematika dan fisika interaktif. Latih pemahaman Anda dengan pembuatan soal yang disesuaikan secara real-time.</p>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; 2026 QuizMaster. Dibuat untuk latihan belajar mandiri.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modular Scripts -->
+    <script src="js/env.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/history.js"></script>
+</body>
+</html>

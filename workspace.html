@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster - Ruang Kerja Latihan Soal & Coretan</title>
+    <meta name="description" content="Kerjakan paket 5 soal interaktif Matematika & Fisika dengan bantuan AI dan papan coret-coretan whiteboard.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for beautiful math formula rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.contrib/auto-render.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Blur Decorative Elements -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Navigation Bar -->
+    <header class="navbar" id="main-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo" id="nav-brand">
+                <i data-lucide="brain-circuit" class="logo-icon"></i>
+                <span>Quiz<span class="logo-accent">Master</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link" id="link-home">Home</a>
+                <a href="history.html" class="nav-link" id="link-history">Riwayat Soal</a>
+            </nav>
+            <div class="nav-cta">
+                <button class="btn-theme-toggle" id="btn-settings-toggle" aria-label="Pengaturan API" title="Pengaturan AI Gemini">
+                    <i data-lucide="settings"></i>
+                </button>
+                <button class="btn-theme-toggle" id="btn-theme-toggle" aria-label="Toggle Tema Terang/Gelap" title="Ubah Tema">
+                    <i data-lucide="sun" id="theme-icon"></i>
+                </button>
+                <a href="index.html#step-subject-container" class="btn btn-secondary btn-sm" id="btn-quick-start">Pilih Pelajaran</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Content -->
+    <main class="main-content">
+        <section class="view-panel" id="panel-workspace">
+            <div class="workspace-wrapper">
+                
+                <!-- Left Pane: Quiz Board -->
+                <div class="workspace-pane quiz-board glass-card">
+                    <!-- Workspace Header -->
+                    <div class="pane-header">
+                        <button class="btn btn-secondary btn-sm" id="btn-back-home">
+                            <i data-lucide="arrow-left"></i> Kembali
+                        </button>
+                        <div class="workspace-badges">
+                            <span class="badge-tag subject-badge" id="badge-current-subject">Matematika</span>
+                            <span class="badge-tag subtopic-badge" id="badge-current-subtopic">Aljabar</span>
+                        </div>
+                    </div>
+
+                    <!-- Settings Toolbar -->
+                    <div class="quiz-settings-toolbar">
+                        <!-- Difficulty Selector -->
+                        <div class="setting-group">
+                            <span class="setting-label">Tingkat Kesulitan:</span>
+                            <div class="toggle-switch" id="difficulty-toggle">
+                                <button class="toggle-btn active" data-difficulty="easy">Easy</button>
+                                <button class="toggle-btn" data-difficulty="medium">Medium</button>
+                                <button class="toggle-btn" data-difficulty="hard">Hard</button>
+                            </div>
+                        </div>
+                        <!-- Question Type Selector -->
+                        <div class="setting-group">
+                            <span class="setting-label">Tipe Soal:</span>
+                            <div class="toggle-switch" id="type-toggle">
+                                <button class="toggle-btn active" data-type="pilihan-ganda">Pilihan Ganda</button>
+                                <button class="toggle-btn" data-type="multiple-choices">Pilihan Ganda Kompleks</button>
+                                <button class="toggle-btn" data-type="essay">Essay</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Header -->
+                    <div class="gform-progress-bar-container">
+                        <div class="gform-progress-text">
+                            <span id="gform-batch-indicator">Paket Soal: 1 - 5 Soal</span>
+                            <span id="gform-score-badge" class="gform-score-badge hidden">Skor: 0/100</span>
+                        </div>
+                        <button class="btn-refresh-question" id="btn-regenerate-question" title="Generate 5 Soal Baru (AI)">
+                            <i data-lucide="refresh-cw"></i> Acak 5 Soal Baru
+                        </button>
+                    </div>
+
+                    <!-- Scrollable Container for 5 Questions -->
+                    <div class="gform-questions-scroll-area" id="gform-questions-wrapper">
+                        <!-- Injected by js/workspace.js -->
+                    </div>
+
+                    <!-- Footer Actions -->
+                    <div class="quiz-footer-actions">
+                        <button class="btn btn-primary btn-lg" id="btn-submit-answer">
+                            <i data-lucide="send"></i> Kirim & Periksa Semua Jawaban (5 Soal)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right Pane: Scratchpad (Coret-coretan) -->
+                <div class="workspace-pane scratchpad-board glass-card">
+                    <div class="pane-header">
+                        <h3><i data-lucide="edit-3" class="header-icon"></i> Ruang Coretan</h3>
+                        <div class="toggle-switch" id="scratchpad-mode-toggle">
+                            <button class="toggle-btn active" data-mode="ketik">Mode Ketik</button>
+                            <button class="toggle-btn" data-mode="gambar">Mode Gambar</button>
+                        </div>
+                    </div>
+
+                    <!-- Mode Ketik (Text Editor) -->
+                    <div class="scratchpad-content" id="scratchpad-text-wrapper">
+                        <textarea id="notepad-area" placeholder="Gunakan area ini untuk mencoret-coret dengan cara mengetik rumus, coret-coret hitungan angka, atau menuliskan catatan penting latihan belajar Anda..."></textarea>
+                    </div>
+
+                    <!-- Mode Gambar (HTML5 Canvas) -->
+                    <div class="scratchpad-content hidden" id="scratchpad-canvas-wrapper">
+                        <!-- Canvas Controls -->
+                        <div class="canvas-controls">
+                            <div class="control-item">
+                                <label for="canvas-color">Warna:</label>
+                                <input type="color" id="canvas-color" value="#1e293b">
+                            </div>
+                            <div class="control-item">
+                                <label for="canvas-width">Ukuran:</label>
+                                <input type="range" id="canvas-width" min="1" max="15" value="3">
+                                <span id="width-indicator">3px</span>
+                            </div>
+                            <div class="control-spacer"></div>
+                            <button class="btn-canvas-action" id="btn-canvas-undo" title="Urungkan">
+                                <i data-lucide="undo-2"></i>
+                            </button>
+                            <button class="btn-canvas-action warning" id="btn-canvas-clear" title="Bersihkan Semua">
+                                <i data-lucide="trash-2"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Drawing Area Container -->
+                        <div class="canvas-container">
+                            <canvas id="paint-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL: API Settings -->
+    <div class="modal-overlay hidden" id="modal-api-settings">
+        <div class="glass-card modal-content">
+            <div class="modal-header">
+                <h3>Pengaturan AI Gemini</h3>
+                <button class="btn-close-modal" id="btn-close-api-modal" aria-label="Tutup modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Masukkan Google Gemini API Key Anda untuk mengaktifkan pembuatan soal dinamis cerdas berbasis AI. Key disimpan aman di browser Anda.</p>
+                <form id="form-api-settings">
+                    <div class="input-field-group" style="margin-bottom: 16px;">
+                        <label for="input-api-key">Gemini API Key:</label>
+                        <input type="password" id="input-api-key" placeholder="AIzaSy..." autocomplete="off">
+                    </div>
+                    <div class="input-field-group">
+                        <label for="input-model-name">Nama Model Gemini:</label>
+                        <input type="text" id="input-model-name" placeholder="gemini-3.5-flash-lite" autocomplete="off">
+                        <small style="color: var(--text-muted); font-size: 0.8em; margin-top: 4px; display: block;">Contoh: gemini-3.5-flash-lite, gemini-2.5-flash, gemini-1.5-flash</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-api-modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <i data-lucide="brain-circuit" class="logo-icon"></i>
+                    <span>Quiz<span class="logo-accent">Master</span></span>
+                </a>
+                <p>Website belajar matematika dan fisika interaktif. Latih pemahaman Anda dengan pembuatan soal yang disesuaikan secara real-time.</p>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; 2026 QuizMaster. Dibuat untuk latihan belajar mandiri.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modular Scripts -->
+    <script src="js/env.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/workspace.js"></script>
+</body>
+</html>

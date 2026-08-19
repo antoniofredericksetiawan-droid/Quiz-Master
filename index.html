@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster - Beranda & Pilih Pelajaran Interaktif</title>
+    <meta name="description" content="QuizMaster membantu Anda belajar Matematika & Fisika secara interaktif dengan bank soal berbasis AI, editor coret-coretan, dan simulasi jenis soal.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- KaTeX for beautiful math formula rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.contrib/auto-render.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Background Blur Decorative Elements -->
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+
+    <!-- Navigation Bar -->
+    <header class="navbar" id="main-navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo" id="nav-brand">
+                <i data-lucide="brain-circuit" class="logo-icon"></i>
+                <span>Quiz<span class="logo-accent">Master</span></span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link active" id="link-home">Home</a>
+                <a href="history.html" class="nav-link" id="link-history">Riwayat Soal</a>
+            </nav>
+            <div class="nav-cta">
+                <button class="btn-theme-toggle" id="btn-settings-toggle" aria-label="Pengaturan API" title="Pengaturan AI Gemini">
+                    <i data-lucide="settings"></i>
+                </button>
+                <button class="btn-theme-toggle" id="btn-theme-toggle" aria-label="Toggle Tema Terang/Gelap" title="Ubah Tema">
+                    <i data-lucide="sun" id="theme-icon"></i>
+                </button>
+                <button class="btn btn-secondary btn-sm" id="btn-quick-start">Pilih Pelajaran</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-content">
+
+        <!-- SECTION 1: Landing Page / Subject Selection -->
+        <section class="view-panel" id="panel-home">
+            <div class="container hero-container">
+                <div class="hero-intro">
+                    <div class="badge">
+                        <i data-lucide="sparkles" class="badge-icon"></i>
+                        <span>Belajar Matematika & Fisika Lebih Asyik</span>
+                    </div>
+                    <h1>Welcome to <span class="gradient-text">QuizMaster</span> Website</h1>
+                    <p class="hero-subtitle">Platform latihan belajar interaktif matematika dan fisika. Dilengkapi bank soal cerdas (AI Simulation), papan coret-coretan gambar, serta penyesuaian kesulitan sesuai kebutuhan belajar Anda.</p>
+                </div>
+
+                <!-- Step 1: Select Education Level -->
+                <div class="selection-step-container" id="step-level-container">
+                    <h2 class="section-title">1. Pilih Tingkat Pendidikan</h2>
+                    <div class="level-grid">
+                        <button class="level-card glass-card" data-level="sd" aria-label="Tingkat SD">
+                            <div class="level-icon-wrapper sd-theme">
+                                <i data-lucide="smile"></i>
+                            </div>
+                            <h3>SD (Sekolah Dasar)</h3>
+                            <p>Materi berhitung dasar, penjumlahan, perkalian, pecahan, dan sains alam sederhana.</p>
+                            <span class="btn btn-outline btn-sm">Pilih SD</span>
+                        </button>
+                        
+                        <button class="level-card glass-card" data-level="smp" aria-label="Tingkat SMP">
+                            <div class="level-icon-wrapper smp-theme">
+                                <i data-lucide="graduation-cap"></i>
+                            </div>
+                            <h3>SMP (Menengah Pertama)</h3>
+                            <p>Persamaan aljabar dasar, geometri Pythagoras, aritmatika sosial, pengukuran, & gaya.</p>
+                            <span class="btn btn-outline btn-sm">Pilih SMP</span>
+                        </button>
+                        
+                        <button class="level-card glass-card" data-level="sma" aria-label="Tingkat SMA">
+                            <div class="level-icon-wrapper sma-theme">
+                                <i data-lucide="award"></i>
+                            </div>
+                            <h3>SMA (Menengah Atas)</h3>
+                            <p>Matematika lanjut aljabar fungsi, trigonometri, kalkulus limit, mekanika, & optik fisika.</p>
+                            <span class="btn btn-outline btn-sm">Pilih SMA</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Select Subject (Hidden Initially) -->
+                <div class="selection-step-container hidden" id="step-subject-container">
+                    <h2 class="section-title">2. Pilih Pelajaran</h2>
+                    <div class="subject-grid">
+                        <!-- Matematika Card -->
+                        <button class="subject-card glass-card" id="btn-subject-math" aria-label="Pilih Pelajaran Matematika">
+                            <div class="subject-icon-wrapper math-theme">
+                                <i data-lucide="binary"></i>
+                            </div>
+                            <h3>Matematika</h3>
+                            <p>Asah logika dengan topik terstruktur yang disesuaikan untuk tingkatan kelas Anda.</p>
+                            <span class="btn btn-outline btn-sm">Pilih Pelajaran</span>
+                        </button>
+                        <!-- Fisika Card -->
+                        <button class="subject-card glass-card" id="btn-subject-physics" aria-label="Pilih Pelajaran Fisika">
+                            <div class="subject-icon-wrapper physics-theme">
+                                <i data-lucide="atom"></i>
+                            </div>
+                            <h3>Fisika</h3>
+                            <p>Pahami fenomena dan hukum fisika alam berdasarkan tingkatan kelas Anda.</p>
+                            <span class="btn btn-outline btn-sm">Pilih Pelajaran</span>
+                        </button>
+                    </div>
+                    <div class="step-actions">
+                        <button class="btn btn-secondary btn-sm" id="btn-back-to-levels">
+                            <i data-lucide="arrow-left"></i> Kembali ke Tingkatan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Subtopics Container (Hidden Initially) -->
+                <div class="subtopics-container glass-card hidden" id="subtopics-wrapper">
+                    <div class="subtopics-header">
+                        <h3 id="subtopic-title">Pilih Subtopik Matematika</h3>
+                        <p>Pilih subtopik di bawah ini untuk memulai latihan soal cerdas.</p>
+                    </div>
+                    
+                    <!-- Dynamic Subtopics list, injected by js/home.js -->
+                    <div class="subtopics-list" id="list-dynamic-subtopics">
+                    </div>
+                    
+                    <div class="subtopics-footer-actions" style="margin-top: 24px;">
+                        <button class="btn btn-secondary btn-sm" id="btn-back-to-subjects">
+                            <i data-lucide="arrow-left"></i> Kembali ke Pelajaran
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL: API Settings -->
+    <div class="modal-overlay hidden" id="modal-api-settings">
+        <div class="glass-card modal-content">
+            <div class="modal-header">
+                <h3>Pengaturan AI Gemini</h3>
+                <button class="btn-close-modal" id="btn-close-api-modal" aria-label="Tutup modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Masukkan Google Gemini API Key Anda untuk mengaktifkan pembuatan soal dinamis cerdas berbasis AI. Key disimpan aman di browser Anda.</p>
+                <form id="form-api-settings">
+                    <div class="input-field-group" style="margin-bottom: 16px;">
+                        <label for="input-api-key">Gemini API Key:</label>
+                        <input type="password" id="input-api-key" placeholder="AIzaSy..." autocomplete="off">
+                    </div>
+                    <div class="input-field-group">
+                        <label for="input-model-name">Nama Model Gemini:</label>
+                        <input type="text" id="input-model-name" placeholder="gemini-3.5-flash-lite" autocomplete="off">
+                        <small style="color: var(--text-muted); font-size: 0.8em; margin-top: 4px; display: block;">Contoh: gemini-3.5-flash-lite, gemini-2.5-flash, gemini-1.5-flash</small>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-api-modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Pengaturan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: Custom Topic Prompt -->
+    <div class="modal-overlay hidden" id="modal-prompt">
+        <div class="glass-card modal-content">
+            <div class="modal-header">
+                <h3>Buat Subtopik Kustom AI</h3>
+                <button class="btn-close-modal" id="btn-close-modal" aria-label="Tutup modal">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Ketik subtopik pembelajaran matematika atau fisika yang tidak ada di list utama (misal: "pangkat", "hukum newton 3", "fluida dinamis"). AI QuizMaster akan langsung membuatkan soal latihan kustom untuk Anda!</p>
+                <form id="form-custom-topic">
+                    <div class="input-field-group">
+                        <label for="input-custom-topic">Materi / Subtopik:</label>
+                        <input type="text" id="input-custom-topic" placeholder="Contoh: eksponen dan pangkat..." required autocomplete="off">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="btn-cancel-modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Generate dengan AI</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    <i data-lucide="brain-circuit" class="logo-icon"></i>
+                    <span>Quiz<span class="logo-accent">Master</span></span>
+                </a>
+                <p>Website belajar matematika dan fisika interaktif. Latih pemahaman Anda dengan pembuatan soal yang disesuaikan secara real-time.</p>
+            </div>
+            <div class="footer-copyright">
+                <p>&copy; 2026 QuizMaster. Dibuat untuk latihan belajar mandiri.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modular Scripts -->
+    <script src="js/env.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>
