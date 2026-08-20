@@ -206,14 +206,39 @@ Kembalikan respon DALAM FORMAT JSON MURNI TANPA MARKDOWN CODEBLOCK:
         if (!response.ok) throw new Error(`API Error: ${response.status}`);
         const data = await response.json();
         let text = data.candidates[0].content.parts[0].text;
-        
+
         const jsonMatch = text.match(/\[[\s\S]*\]/);
         if (jsonMatch) {
             text = jsonMatch[0];
         } else {
             text = text.replace(/```json/g, '').replace(/```/g, '').trim();
         }
+        text = sanitizeGeminiJsonText(text);
         return JSON.parse(text);
+    }
+
+    // Gemini often emits raw LaTeX backslashes (\sin, \cos, \log, \sqrt, ...) inside
+    // JSON string values. Those aren't valid JSON escapes, so JSON.parse throws.
+    // Keep already-valid escape pairs (\\, \n, \", \uXXXX, ...) intact; double any
+    // other lone backslash so it parses back into a literal backslash character.
+    function sanitizeGeminiJsonText(text) {
+        return text.replace(/\\(["\\/bfnrtu]|u[0-9a-fA-F]{4})|\\/g, (match, validEscape) => {
+            return validEscape !== undefined ? match : '\\\\';
+        });
+    }
+
+    // Retry once on failure (malformed JSON / transient API errors) before giving up.
+    async function fetchQuestionsFromGeminiWithRetry(targetCount, difficulty, topic, type, retries = 1) {
+        let lastError;
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+                return await fetchQuestionsFromGemini(targetCount, difficulty, topic, type);
+            } catch (error) {
+                lastError = error;
+                console.warn(`Gemini fetch attempt ${attempt + 1} failed:`, error);
+            }
+        }
+        throw lastError;
     }
 
     // Dynamic Variation Generator Fallback
@@ -280,12 +305,11 @@ Kembalikan respon DALAM FORMAT JSON MURNI TANPA MARKDOWN CODEBLOCK:
 
         if (gformQuestionsWrapper) {
             gformQuestionsWrapper.innerHTML = `
-                <div style="padding:40px; text-align:center; color:var(--text-muted);">
-                    <i data-lucide="loader-2" style="animation: spin 2s linear infinite; margin-bottom:12px; width:32px; height:32px;"></i>
-                    <p>Memanggil AI Gemini (gemini-3.5-flash-lite) untuk meracik 5 soal baru...</p>
+                <div class="loading-state">
+                    <div class="loading-spinner"></div>
+                    <p>Memanggil AI Gemini (${geminiModel}) untuk meracik 5 soal baru...</p>
                 </div>
             `;
-            if (window.lucide) window.lucide.createIcons();
         }
 
         try {
@@ -296,7 +320,7 @@ Kembalikan respon DALAM FORMAT JSON MURNI TANPA MARKDOWN CODEBLOCK:
                     throw new Error("Silakan masukkan API Key Gemini terlebih dahulu di menu Pengaturan AI!");
                 }
                 const topicName = currentSubtopic.replace(/-/g, ' ');
-                const aiQuestions = await fetchQuestionsFromGemini(targetCount, currentDifficulty, topicName, currentType);
+                const aiQuestions = await fetchQuestionsFromGeminiWithRetry(targetCount, currentDifficulty, topicName, currentType);
                 if (Array.isArray(aiQuestions) && aiQuestions.length > 0) {
                     currentQuestionsBatch = aiQuestions;
                 } else {
